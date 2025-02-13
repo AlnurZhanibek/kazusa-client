@@ -1,0 +1,16 @@
+.wrapper {
+  max-width: 1024px;
+  margin: 96px auto;
+
+  flex: 1 1 auto;
+  background: #fff;
+  padding: 24px;
+
+  .heading {
+    margin-bottom: 8px;
+  }
+
+  .paragraph {
+    margin-bottom: 12px;
+  }
+}
