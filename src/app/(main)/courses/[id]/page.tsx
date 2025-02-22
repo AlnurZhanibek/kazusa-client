@@ -8,6 +8,7 @@ import { Course } from "@/generated/models";
 import Link from "next/link";
 import { headers } from "next/headers";
 import { getUser } from "@/app/utils/auth";
+import { buyCourse } from "@/app/actions/buy-course";
 
 type CoursePageParams = { id: string };
 
@@ -97,10 +98,30 @@ export default async function CoursePage(props: {
               </Button>
             ) : currentUser?.role === "admin" ? (
               <p className={styles.courseInfoText}>No modules yet</p>
+            ) : currentUser ? (
+              <form action={buyCourse}>
+                <input
+                  type="hidden"
+                  name="user_email"
+                  value={currentUser.email}
+                />
+                <input
+                  type="hidden"
+                  name="user_id"
+                  value={currentUser.userId}
+                />
+                <input
+                  type="hidden"
+                  name="user_name"
+                  value={currentUser.name}
+                />
+                <input type="hidden" name="course_name" value={course.title} />
+                <input type="hidden" name="course_price" value={course.price} />
+                <input type="hidden" name="course_id" value={course.id} />
+                <Button type="submit">Buy</Button>
+              </form>
             ) : (
-              <Link target="_blank" href="https://wa.me/+77776664933">
-                Contact Admin
-              </Link>
+              "Please login"
             )}
           </div>
         </div>

@@ -9,7 +9,7 @@ interface UserClaims {
   userId: string;
 }
 
-interface UserData {
+export interface UserData {
   userId: string;
   name: string;
   email: string;
