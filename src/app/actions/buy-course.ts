@@ -27,7 +27,7 @@ export const buyCourse = async (formData: FormData) => {
     amount: Number(formData.get("course_price")),
     currency: "KZT",
     order_id: orderId.toString(),
-    description: `${formData.get("user_email")} buys ${formData.get("course_name")}`,
+    description: `${formData.get("user_email")} buys ${formData.get("course_id")}`,
     payment_type: "pay",
     payment_method: "ecom",
     items: [
@@ -35,7 +35,7 @@ export const buyCourse = async (formData: FormData) => {
         merchant_id: process.env.OV_MID,
         service_id: process.env.OV_SID,
         merchant_name: "KazUSA Platform",
-        name: formData.get("course_name"),
+        name: formData.get("course_id"),
         quantity: 1,
         amount_one_pcs: Number(formData.get("course_price")),
         amount_sum: Number(formData.get("course_price")),
