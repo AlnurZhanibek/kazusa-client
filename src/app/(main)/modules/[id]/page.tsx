@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 
-import { Module } from "@/generated/models";
+import { Course, Module } from "@/generated/models";
 import styles from "./module-page.module.css";
 import Link from "next/link";
 import { headers } from "next/headers";
@@ -16,6 +16,17 @@ type ModulePageParams = {
 async function getModule(id: string): Promise<Module[]> {
   const res = await fetch(
     `${process.env.BASE_URL}/module?id=${encodeURIComponent(id)}`,
+    {
+      headers: new Headers(await headers()),
+    },
+  );
+
+  return res.json();
+}
+
+async function getCourse(id: string): Promise<Course[]> {
+  const res = await fetch(
+    `${process.env.BASE_URL}/course?id=${encodeURIComponent(id)}`,
     {
       headers: new Headers(await headers()),
     },
@@ -44,14 +55,6 @@ export default async function ModulePage(props: ModulePageParams) {
 
   const courseModules = await getModules(moduleData.courseId);
 
-  if (currentUser) {
-    await createActivity({
-      userId: currentUser.userId,
-      courseId: moduleData.courseId,
-      moduleId: moduleData.id,
-    });
-  }
-
   const foundModuleIndex = courseModules.findIndex(
     (mdl) => mdl.id === moduleData.id,
   );
@@ -62,6 +65,23 @@ export default async function ModulePage(props: ModulePageParams) {
   const prevId = prevIndex >= 0 ? courseModules[prevIndex]?.id : null;
   const nextId =
     nextIndex <= courseModules.length ? courseModules[nextIndex]?.id : null;
+
+  const isLast = !nextId;
+
+  if (currentUser) {
+    const courses = await getCourse(moduleData.courseId);
+    const course = courses[0];
+
+    await createActivity({
+      userId: currentUser.userId,
+      userEmail: currentUser.email,
+      userFullname: currentUser.name,
+      courseId: moduleData.courseId,
+      courseName: course.title,
+      moduleId: moduleData.id,
+      isLast,
+    });
+  }
 
   return (
     <div className={styles.modulePage}>

@@ -51,7 +51,11 @@ export interface ModuleUpdateBody {
 
 export interface NewActivity {
   courseId: string;
+  courseName: string;
+  isLast?: boolean;
   moduleId: string;
+  userEmail: string;
+  userFullname: string;
   userId: string;
 }
 
